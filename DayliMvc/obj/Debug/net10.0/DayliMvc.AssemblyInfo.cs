@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DayliMvc")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d5a2ff27b6417ae6558d50af6f156c97c89b4a78")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7ee45e6f4d153ece71434dd69da9a0a1b163ba24")]
 [assembly: System.Reflection.AssemblyProductAttribute("DayliMvc")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DayliMvc")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
