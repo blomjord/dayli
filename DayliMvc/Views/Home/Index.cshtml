@@ -2,7 +2,18 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@model HomepageData
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Today's weather</h3>
+        <p>Time: @Model.Weather.value[0].date</p>
+        <p>Temperatue: @Model.Weather.value[0].value</p>
+        <p>Air quality: @Model.Weather.value[0].quality</p>
+    </div>
+
+    <div class="col-md-6">
+        <h3>Today's calendar</h3>
+        <p>@Model.Calendar?.UserId</p>
+    </div>
 </div>

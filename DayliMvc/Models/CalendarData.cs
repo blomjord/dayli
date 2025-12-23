@@ -3,10 +3,19 @@ using Microsoft.Net.Http.Headers;
 
 namespace DayliMvc.Models;
 
-public class CalendarData
+public class CalendarDataSimple
 {
     public int? UserId { get; set; }
     public int? Id { get; set; }
     public string? Title { get; set;}
     public bool? Completed { get; set; }
 }
+
+public class CalendarDataDetailed
+{
+    public int? UserId { get; set; }
+    public int? Id { get; set; }
+    public string? Title { get; set;}
+    public bool? Completed { get; set; }
+}
+

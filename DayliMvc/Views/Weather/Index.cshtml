@@ -1,5 +1,5 @@
 <!-- Views/Weather/Index.cshtml -->
-@model DayliMvc.Models.WeatherData
+@model DayliMvc.Models.WeatherDataDetailed
 
 @{
     ViewData["Title"] = "Weather";
@@ -7,7 +7,7 @@
 
 <div class="text-center">
     <h1 class="display-4">Weather</h1>
-    <p>How is the weather in Uppsala?</p>
+    <p>Current weather in Uppsala?</p>
 </div>
 
 @if (Model == null)
@@ -21,6 +21,3 @@ else
     <p><strong>Title:</strong> @Model.title</p>
     <p><strong>Completed:</strong> @Model.completed</p>
 }
-
-
-<p>Item 1</p>

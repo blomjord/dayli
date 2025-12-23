@@ -12,11 +12,11 @@ public class WeatherController : Controller
 {
     public async Task<IActionResult> Index()
     {
-        WeatherData? APIResponse = await WeatherService.CallWeatherAPI();
-        if (APIResponse == null)
+        WeatherDataDetailed? Weather = await WeatherService.CallWeatherAPIDetailed();
+        if (Weather == null)
         {
             return View(null);
         }
-        return View(APIResponse);
+        return View(Weather);
     }
 }

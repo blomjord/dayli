@@ -1,14 +1,24 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using DayliMvc.Models;
+using System.Security.Cryptography.X509Certificates;
+using DayliMvc.Services;
 
 namespace DayliMvc.Controllers;
 
 public class HomeController : Controller
 {
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var TaskWeather = WeatherService.CallWeatherAPISimple();
+        var TaskCalendar = CalendarService.CallCalendarAPISimple();
+        await Task.WhenAll(TaskWeather, TaskCalendar);
+        
+        return View(new HomepageData
+        {
+            Weather = await TaskWeather,
+            Calendar = await TaskCalendar
+        });
     }
 
     public IActionResult Privacy()
