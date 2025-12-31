@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using DayliMvc.Models;
-using System.Security.Cryptography.X509Certificates;
 using DayliMvc.Services;
 
 namespace DayliMvc.Controllers;
@@ -10,10 +9,10 @@ public class HomeController : Controller
 {
     public async Task<IActionResult> Index()
     {
-        var TaskWeather = WeatherService.CallWeatherAPISimple();
+        var TaskWeather = WeatherService.GetWeatherPointData();
         var TaskCalendar = CalendarService.CallCalendarAPISimple();
         await Task.WhenAll(TaskWeather, TaskCalendar);
-        
+
         return View(new HomepageData
         {
             Weather = await TaskWeather,

@@ -1,47 +1,28 @@
 // Services/WeatherServices.cs
 using DayliMvc.Models;
-using System.ComponentModel;
-using System.Net.Http;
+using DayliMvc.Models.WeatherData;
 using System.Text.Json;
-using System.Xml;
 
 namespace DayliMvc.Services;
 
 public class WeatherService
 {
-    private static string BaseUrl = $"https://opendata-download-metobs.smhi.se/api/version/latest/parameter";
-    private static string ParamTemperatureInstantaneous = "1";  // Once per hour
-    private static string ParamPrecipitation = "17";            // Twice per day; 06:00, 18:00
-    private static string ParamWindspeed = "4";                 // Once per hour, average
-    private static string ParamWindDirection = "3";             // Once per hour, average
-    private static string ParamSnowDepth = "8";                 // Once per day; 06:00
-    
-    private static string StationUppsalaAut = "97510";
-    private static string StationHarnosand = "97510";
+    private static string baseUrl = $"https://opendata-download-metfcst.smhi.se/api/category/snow1g/version/1";
+    private static string createdTimeUrl = $"{baseUrl}/createdtime.json";
+    private static string wantedLatitude = "57.996626";
+    private static string wantedLongitude = "16.011977";
+    private static string pointDataUrl = $"{baseUrl}/geotype/point/lon/${wantedLongitude}/lat/${wantedLatitude}/data.json";
+    private static string testUrl = "https://opendata-download-metfcst.smhi.se/api/category/snow1g/version/1/geotype/point/lon/16.011977/lat/57.996626/data.json";
 
-    // https://opendata-download-metobs.smhi.se/api/version/latest/parameter/1/station/97510/period/latest-day/data.json";
-
-    public static async Task<WeatherDataSimple?> CallWeatherAPISimple()
+    public static async Task<WeatherDataFront?> GetWeatherPointData()
     {
         using HttpClient httpClient = new HttpClient();
         try
         {
-            HttpResponseMessage response = await httpClient.GetAsync($"{BaseUrl}/{ParamTemperatureInstantaneous}/station/{StationUppsalaAut}/period/latest-day/data.json");
-            response.EnsureSuccessStatusCode();
-            string responseContent = await response.Content.ReadAsStringAsync();
-
-            //WeatherDataSimple? weatherData = new WeatherDataSimple();
-            var weatherData = JsonSerializer.Deserialize<WeatherDataSimple>(responseContent);
-            long updated = weatherData.updated;
-
-            // Convert UNIX Epoch to date time
-            var dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(updated);
-            var dateTime = dateTimeOffset.DateTime;
-            Console.WriteLine($"Time is {dateTime}");
-            //weatherData.time = dateTime.ToString();
-            //weatherData.time = "1";
-            //weatherData.value[0].time = "1";
-            weatherData.value[0].date = 1;
+            HttpResponseMessage pointDataResponse = await httpClient.GetAsync($"{testUrl}");
+            pointDataResponse.EnsureSuccessStatusCode();
+            string pointData = await pointDataResponse.Content.ReadAsStringAsync();
+            var weatherData = JsonSerializer.Deserialize<WeatherDataFront>(pointData);
             return weatherData;
         }
         catch (HttpRequestException e)
@@ -50,34 +31,4 @@ public class WeatherService
             return null;
         }
     }
-
-    public static async Task<WeatherDataDetailed?> CallWeatherAPIDetailed()
-    {
-        using HttpClient httpClient = new HttpClient();
-        try
-        {
-            HttpResponseMessage response = await httpClient.GetAsync("https://jsonplaceholder.typicode.com/todos/1");
-            response.EnsureSuccessStatusCode();
-            string responseContent = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(responseContent);
-
-            WeatherDataDetailed? weatherData = JsonSerializer.Deserialize<WeatherDataDetailed>(
-                responseContent, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-            return weatherData;
-        }
-        catch (HttpRequestException e)
-        {
-            Console.WriteLine($"Request error: {e}");
-            return null;
-        }
-    }
-
 }
-
-// SMHI API info here ---> https://opendata.smhi.se/metobs/introduction
-
-// Test API Response: https://jsonplaceholder.typicode.com/todos/1
-// https://opendata-download-metobs.smhi.se/api/version/latest/parameter/1/station/159880/period/latest-day/data.json
