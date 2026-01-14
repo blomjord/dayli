@@ -1,4 +1,6 @@
 // Models/WeatherData.cs
+#nullable enable
+
 namespace DayliMvc.Models.WeatherData;
 
 public class WeatherDataFront
