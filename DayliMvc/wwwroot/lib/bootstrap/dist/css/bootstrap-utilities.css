@@ -1900,7 +1900,7 @@
 }
 
 .text-muted {
-  --bs-text-opacity: 1;
+  --bs-text-opacity: 10;
   color: var(--bs-secondary-color) !important;
 }
 
