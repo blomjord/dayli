@@ -19,6 +19,7 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-color: rgb(200, 223, 238);
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -30,6 +31,23 @@ body {
   text-align: start;
 }
 
+.weather-row {
+  justify-content: space-evenly;
+}
 .weather-box {
   background-color: #258cfb;
+}
+
+.round-edge-box {
+  flex: 0 0 auto;
+  width: 45%;
+  border: 2px solid;
+  border-radius: 25px;
+  border-color: #258cfb;
+  padding: 12px;
+  margin: 1px;
+}
+
+.prognosis-data {
+  line-height: 0.4;
 }

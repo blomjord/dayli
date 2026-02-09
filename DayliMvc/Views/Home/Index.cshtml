@@ -4,32 +4,44 @@
 }
 
 @model HomepageData
-<div class="container">
 
 <div class="row">
-    <div class="col-md-6">
-        <h3 class="center">Today's weather</h3>
-        <p>Current prognosis was created: @Model.Weather.createdTime</p>
-        <p>Prognosis based on coordinates: @Model.Weather.geometry.coordinates[1] @Model.Weather.geometry.coordinates[0]</p>
-        <div class="row">
-            <div class="col-md-6">
+    <div class="round-edge-box">
+        <h3>Dagens väder</h3>
+        <div class="prognosis-data">
+            <p>Prognos skapad: @Model.Weather.createdTime</p>
+            <p>Prognos baserad på koord: @Model.Weather.geometry.coordinates[1] @Model.Weather.geometry.coordinates[0]</p>
+        </div>
+        
+        <div class="row weather-row">
+            <div class="col-md-auto">
+                <center>Datum och tid
                 @foreach (var element in Model.Weather.timeSeries.Take(12)) {
                     <p>@element.time</p>
                 }
+                </center>
             </div>
-            <div class="col-md-6">
+
+            <div class="col-md-auto">
+                <center>Temperatur
                 @foreach (var element in Model.Weather.timeSeries.Take(12)) {
                     <p>@element.data.air_temperature &degC</p>
                 }
-                
+                </center>
+            </div>
+
+            <div class="col-md-auto">
+                <center>Vädertyp
+                @foreach (var element in Model.Weather.timeSeries.Take(12)) {
+                    <p>@element.data.symbol_code</p>
+                }
+                </center>
             </div>
         </div>
     </div>
 
-    <div class="col-md-6">
-        <h3>Today's calendar</h3>
+    <div class="round-edge-box">
+        <h3>Dagens schema</h3>
         <p>@Model.Calendar?.UserId</p>
     </div>
-</div>
-
 </div>
