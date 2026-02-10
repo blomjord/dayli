@@ -3,6 +3,8 @@
 
 using DayliMvc.Models;
 using DayliMvc.Models.WeatherData;
+using Microsoft.VisualBasic;
+using System.Globalization;
 using System.Text.Json;
 
 namespace DayliMvc.Services;
