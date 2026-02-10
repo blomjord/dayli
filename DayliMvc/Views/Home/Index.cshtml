@@ -7,12 +7,7 @@
 
 <div class="row">
     <div class="round-edge-box">
-        <h3>Dagens väder</h3>
-        <div class="prognosis-data">
-            <p>Prognos skapad: @Model.Weather.createdTime</p>
-            <p>Prognos baserad på koord: @Model.Weather.geometry.coordinates[1] @Model.Weather.geometry.coordinates[0]</p>
-        </div>
-        
+        <h3>Dagens väder</h3>       
         <div class="row weather-row">
             <div class="col-md-auto">
                 <center>Datum och tid
@@ -31,9 +26,12 @@
             </div>
 
             <div class="col-md-auto">
-                <center>Vädertyp
+                <center>Väder
                 @foreach (var element in Model.Weather.timeSeries.Take(12)) {
-                    <p>@element.data.symbol_code</p>
+                    <p class="weather-icon">
+                        <img src="~/Img/@(element.data.symbol_code).webp" style="width: 75%;" alt="@(element.data.symbol_code).webp">
+                    </p>
+                    
                 }
                 </center>
             </div>
