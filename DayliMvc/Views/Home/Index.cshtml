@@ -8,44 +8,36 @@
 @model HomepageData
 
 <div class="row">
-    <div class="round-edge-box">
-        <h3><center>Dagens väder</center></h3>       
-        <div class="row weather-row">
-            <div class="col-md-auto">
-                <center>Datum och tid
-                @foreach (var element in Model.Weather.timeSeries.Take(12)) {
-                    <p>
-                        <time>
-                            @element.time.ToString("dd MMM HH:mm", new CultureInfo("sv-SE"))
-                        </time>
-                    </p>
+                
+<div class="col-6 rounded-borders-blue">
+    <h2 class="col-12 home-hdr" style="margin: auto;">Dagens väder</h3>
+            <table>
+            <tbody>
+            @foreach (var element in Model.Weather.timeSeries.Take(12)) {
+                <tr>
+                <td>
+                <p style="direction: rtl;">
+                <span style="white-space: nowrap; direction: ltr; display: inline-block;">
+                    <time>
+                    @element.time.ToString("dd MMM HH:mm", new CultureInfo("sv-SE"))
+                    </time>
+                </span>
+                </p>
+                </td>
+                <td>@element.data.air_temperature&deg C</td>       
+                <td>
+                <p class="weather-icon">
+                <img src="~/Img/@(element.data.symbol_code).webp" alt="@(element.data.symbol_code).webp">
+                </p>
+                </td>
+                </tr>
                 }
-                </center>
-            </div>
-
-            <div class="col-md-auto">
-                <center>Temperatur
-                @foreach (var element in Model.Weather.timeSeries.Take(12)) {
-                    <p>@element.data.air_temperature &degC</p>
-                }
-                </center>
-            </div>
-
-            <div class="col-md-auto">
-                <center>Väder
-                @foreach (var element in Model.Weather.timeSeries.Take(12)) {
-                    <p class="weather-icon">
-                        <img src="~/Img/@(element.data.symbol_code).webp" style="width: 75%;" alt="@(element.data.symbol_code).webp">
-                    </p>
-                    
-                }
-                </center>
-            </div>
-        </div>
+            </tbody>
+            </table>
     </div>
 
-    <div class="round-edge-box">
-        <h3><center>Dagens schema</center></h3>
-        <p>@Model.Calendar?.UserId</p>
-    </div>
+<div class="col-6 rounded-borders-blue">
+    <h2 class="col-12 home-hdr">Dagens schema</h3>
+</div>
+
 </div>

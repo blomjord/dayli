@@ -31,30 +31,39 @@ body {
   text-align: start;
 }
 
-.weather-row {
-  justify-content: space-evenly;
-}
-.weather-box {
-  background-color: #258cfb;
+.weather-icon img {
+  max-width: 40px;
+  margin: auto;
 }
 
-.weather-icon {
-  position: relative;
-  width: 39px;
-  height: 40px;
-  margin: 0%;
+.home-hdr {
+  max-height: 30px;
+  font-size: 2em;
+  text-align: center;
 }
 
-.round-edge-box {
-  flex: 0 0 auto;
-  width: 45%;
+table {
+  table-layout: fixed;
+  width: 100%;
+  margin: 4px;
+}
+
+tr {
+  text-align: center;
+  height: 50px;
+}
+
+td p {
+  margin: auto;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.rounded-borders-blue {
+  width: 49%;
   border: 2px solid;
-  border-radius: 25px;
+  border-radius: 50px;
   border-color: #258cfb;
-  padding: 12px;
   margin: 1px;
-}
-
-.prognosis-data {
-  line-height: 0.4;
 }
