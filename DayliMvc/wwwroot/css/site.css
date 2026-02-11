@@ -37,7 +37,7 @@ body {
 }
 
 .home-hdr {
-  max-height: 30px;
+  padding-top: 4px;
   font-size: 2em;
   text-align: center;
 }
@@ -65,5 +65,4 @@ td p {
   border: 2px solid;
   border-radius: 50px;
   border-color: #258cfb;
-  margin: 1px;
 }
