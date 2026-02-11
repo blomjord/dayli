@@ -19,8 +19,11 @@ public class CalendarService
     static private string RootPath = @"I:\Programming\dayliCredentials\";
     static string[] Scopes = [Google.Apis.Calendar.v3.CalendarService.Scope.CalendarReadonly];
     static string applicationName = "Google Calendar API for dayli project";
+
     public static async Task<CalendarDataFront?> GetCalendarDailyEvents()
     {
+        var shared = File.ReadAllText(@"wwwroot\calendarShared.txt");
+
         try
         {
             // Authentication
@@ -45,47 +48,74 @@ public class CalendarService
                 ApplicationName = applicationName
             });
 
-            EventsResource.ListRequest request = service.Events.List("primary");
-            request.TimeMinDateTimeOffset = DateTime.Now;
-            request.ShowDeleted = false;
-            request.SingleEvents = true;
-            request.MaxResults = 10;
-            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+            DateTimeOffset now = DateTime.Now;
+            DateTimeOffset MaxTimeLimit = now.AddHours(24);
+
+            // Private calendar
+            EventsResource.ListRequest request_primary = service.Events.List("primary");
+            request_primary.TimeMinDateTimeOffset = now;
+            request_primary.TimeMaxDateTimeOffset = MaxTimeLimit;
+            request_primary.ShowDeleted = false;
+            request_primary.SingleEvents = true;
+            request_primary.MaxResults = 10;
+            request_primary.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+
+            // Secondary calendar (optional)
+            EventsResource.ListRequest request_shared = service.Events.List(shared);
+            request_shared.TimeMinDateTimeOffset = now;
+            request_shared.TimeMaxDateTimeOffset = MaxTimeLimit;
+            request_shared.ShowDeleted = false;
+            request_shared.SingleEvents = true;
+            request_shared.MaxResults = 10;
+            request_shared.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
 
             // List current events
-            Events events = request.Execute();
-            Console.WriteLine("Upcoming events:");
+            Events events_primary = request_primary.Execute();
+            Events events_shared = request_shared.Execute();
 
-            if (events == null || events.Items.Count == 0)
+            var primaryNotNull = true;
+            var sharedNotNull = true;
+
+            if (events_primary == null || events_primary.Items.Count == 0)
             {
-                Console.WriteLine("NO events");
+                Console.WriteLine("No events in private calendar");
+                primaryNotNull = false;
+            }
+            if (events_shared == null || events_shared.Items.Count == 0)
+            {
+                Console.WriteLine("No events in shared calendar.");
+                sharedNotNull = false;
             }
 
-            foreach (var eventItem in events.Items)
+            if (primaryNotNull && sharedNotNull)
             {
-                string when = eventItem.Start.DateTimeDateTimeOffset.ToString();
-                if (String.IsNullOrEmpty(when))
+                // TODO: Implement response join
+            }
+            else if (sharedNotNull)
+            {
+                foreach (var eventItem in events_shared.Items)
                 {
-                    when = eventItem.Start.Date;    
+                    string when = eventItem.Start.DateTimeDateTimeOffset.ToString();
+                    if (string.IsNullOrEmpty(when))
+                    {
+                        when = eventItem.Start.Date;    
+                    }
+                    Console.WriteLine("{0} ({1})", eventItem.Summary, when);
+                }                
+            }
+            else if (primaryNotNull)
+            {
+                foreach (var eventItem in events_primary.Items)
+                {
+                    string when = eventItem.Start.DateTimeDateTimeOffset.ToString();
+                    if (string.IsNullOrEmpty(when))
+                    {
+                        when = eventItem.Start.Date;    
+                    }
+                    Console.WriteLine("{0} ({1})", eventItem.Summary, when);
                 }
-                Console.WriteLine("{0} ({1})", eventItem.Summary, when);
             }
-            // For testing
-            HttpClient httpClient = new HttpClient();
-            try
-            {
-                HttpResponseMessage pointDataResponse = await httpClient.GetAsync($"https://jsonplaceholder.typicode.com/todos/1");
-                pointDataResponse.EnsureSuccessStatusCode();
-                string pointData = await pointDataResponse.Content.ReadAsStringAsync();
-                var calendarData = JsonSerializer.Deserialize<CalendarDataFront>(pointData);
-                return calendarData;
-            }
-            catch (HttpRequestException e)
-            {
-                Console.WriteLine($"Request error: {e}");
-                return null;
-            }
-
+            return null;
         }
         catch (FileNotFoundException e)
         {
