@@ -16,7 +16,7 @@ using System.Threading;
 namespace DayliMvc.Services;
 public class CalendarService
 {
-    static private string RootPath = @"I:\Programming\GoogleApiCredentials\";
+    static private string RootPath = @"I:\Programming\dayliCredentials\";
     static string[] Scopes = [Google.Apis.Calendar.v3.CalendarService.Scope.CalendarReadonly];
     static string applicationName = "Google Calendar API for dayli project";
     public static async Task<CalendarDataFront?> GetCalendarDailyEvents()
@@ -70,9 +70,22 @@ public class CalendarService
                 }
                 Console.WriteLine("{0} ({1})", eventItem.Summary, when);
             }
-            string json = "{test}";
-            var calendarData = JsonSerializer.Deserialize<CalendarDataFront>(json);
-            return calendarData;
+            // For testing
+            HttpClient httpClient = new HttpClient();
+            try
+            {
+                HttpResponseMessage pointDataResponse = await httpClient.GetAsync($"https://jsonplaceholder.typicode.com/todos/1");
+                pointDataResponse.EnsureSuccessStatusCode();
+                string pointData = await pointDataResponse.Content.ReadAsStringAsync();
+                var calendarData = JsonSerializer.Deserialize<CalendarDataFront>(pointData);
+                return calendarData;
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"Request error: {e}");
+                return null;
+            }
+
         }
         catch (FileNotFoundException e)
         {
@@ -81,5 +94,3 @@ public class CalendarService
         }
     }
 }
-
-// Test API Response: https://jsonplaceholder.typicode.com/todos/1
