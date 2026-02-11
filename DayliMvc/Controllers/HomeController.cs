@@ -11,14 +11,15 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         var TaskWeather = WeatherService.GetWeatherPointData();
-        var TaskCalendar = CalendarService.CallCalendarAPISimple();
+        var TaskCalendar = CalendarService.GetCalendarDailyEvents();
         await Task.WhenAll(TaskWeather, TaskCalendar);
 
-        return View(new HomepageData
-        {
-            Weather = await TaskWeather,
-            Calendar = await TaskCalendar
-        });
+        return View(
+            new HomepageData
+                {
+                    Weather = await TaskWeather,
+                    Calendar = await TaskCalendar
+                });
     }
 
     public IActionResult Privacy()

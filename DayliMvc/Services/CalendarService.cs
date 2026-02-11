@@ -2,63 +2,84 @@ using DayliMvc.Models;
 using System.Net.Http;
 using System.Text.Json;
 
-namespace DayliMvc.Services;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Calendar.v3.Data;
+using Google.Apis.Services;
+using Google.Apis.Util.Store;
+using System;
+using System.IO;
+using System.Threading;
 
+#nullable enable
+
+namespace DayliMvc.Services;
 public class CalendarService
 {
-    public static async Task<CalendarDataSimple?> CallCalendarAPISimple()
+    static private string RootPath = @"I:\Programming\GoogleApiCredentials\";
+    static string[] Scopes = [Google.Apis.Calendar.v3.CalendarService.Scope.CalendarReadonly];
+    static string applicationName = "Google Calendar API for dayli project";
+    public static async Task<CalendarDataFront?> GetCalendarDailyEvents()
     {
-        using HttpClient httpClient = new HttpClient();
-
         try
         {
-            HttpResponseMessage response = await httpClient.GetAsync("https://jsonplaceholder.typicode.com/todos/1");
-            response.EnsureSuccessStatusCode();
-            string responseContent = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(responseContent);
-
-            CalendarDataSimple? CalendarData = JsonSerializer.Deserialize<CalendarDataSimple>(
-                responseContent, 
-                new JsonSerializerOptions
+            // Authentication
+            UserCredential credential;
+            using (var stream =
+                    new FileStream(RootPath + "credentials.json", FileMode.Open, FileAccess.Read))
             {
-                PropertyNameCaseInsensitive = true
+                string credPath = RootPath + "token.json";
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.FromStream(stream).Secrets,
+                    Scopes,
+                    "user",
+                    CancellationToken.None,
+                    new FileDataStore(credPath, true)).Result;
+                Console.WriteLine("Credetial file saved at: " + credPath);
+            }
+
+            // Create calendar service
+            var service = new Google.Apis.Calendar.v3.CalendarService(new BaseClientService.Initializer
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = applicationName
             });
-            return CalendarData;
+
+            EventsResource.ListRequest request = service.Events.List("primary");
+            request.TimeMinDateTimeOffset = DateTime.Now;
+            request.ShowDeleted = false;
+            request.SingleEvents = true;
+            request.MaxResults = 10;
+            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+
+            // List current events
+            Events events = request.Execute();
+            Console.WriteLine("Upcoming events:");
+
+            if (events == null || events.Items.Count == 0)
+            {
+                Console.WriteLine("NO events");
+            }
+
+            foreach (var eventItem in events.Items)
+            {
+                string when = eventItem.Start.DateTimeDateTimeOffset.ToString();
+                if (String.IsNullOrEmpty(when))
+                {
+                    when = eventItem.Start.Date;    
+                }
+                Console.WriteLine("{0} ({1})", eventItem.Summary, when);
+            }
+            string json = "{test}";
+            var calendarData = JsonSerializer.Deserialize<CalendarDataFront>(json);
+            return calendarData;
         }
-        catch (HttpRequestException e)
+        catch (FileNotFoundException e)
         {
-            Console.WriteLine($"Request error: {e}");
+            Console.WriteLine(e.Message);
             return null;
         }
     }
-    public static async Task<CalendarDataDetailed?> CallCalendarAPIDetailed()
-    {
-        using HttpClient httpClient = new HttpClient();
-
-        try
-        {
-            HttpResponseMessage response = await httpClient.GetAsync("https://jsonplaceholder.typicode.com/todos/1");
-            response.EnsureSuccessStatusCode();
-            string responseContent = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(responseContent);
-
-            CalendarDataDetailed? CalendarData = JsonSerializer.Deserialize<CalendarDataDetailed>(
-                responseContent, 
-                new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-            return CalendarData;
-        }
-        catch (HttpRequestException e)
-        {
-            Console.WriteLine($"Request error: {e}");
-            return null;
-        }
-    }
-
 }
-
-// SMHI API info here ---> https://opendata.smhi.se/metobs/introduction
 
 // Test API Response: https://jsonplaceholder.typicode.com/todos/1
