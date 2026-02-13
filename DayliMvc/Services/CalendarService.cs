@@ -10,6 +10,7 @@ using Google.Apis.Util.Store;
 using System;
 using System.IO;
 using System.Threading;
+using DayliMvc.Models.CalendarData;
 
 #nullable enable
 
@@ -48,8 +49,9 @@ public class CalendarService
                 ApplicationName = applicationName
             });
 
+            // Only show events same day 00:00-24:00
             DateTimeOffset now = DateTime.Now;
-            DateTimeOffset MaxTimeLimit = now.AddHours(24);
+            DateTimeOffset MaxTimeLimit = DateTime.Today.AddDays(1);
 
             // Private calendar
             EventsResource.ListRequest request_primary = service.Events.List("primary");
@@ -59,6 +61,7 @@ public class CalendarService
             request_primary.SingleEvents = true;
             request_primary.MaxResults = 10;
             request_primary.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+            Events events_primary = request_primary.Execute();
 
             // Secondary calendar (optional)
             EventsResource.ListRequest request_shared = service.Events.List(shared);
@@ -68,54 +71,34 @@ public class CalendarService
             request_shared.SingleEvents = true;
             request_shared.MaxResults = 10;
             request_shared.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
-
-            // List current events
-            Events events_primary = request_primary.Execute();
             Events events_shared = request_shared.Execute();
 
-            var primaryNotNull = true;
-            var sharedNotNull = true;
+            var combined = new List<Event>();
 
-            if (events_primary == null || events_primary.Items.Count == 0)
+            if (events_primary != null && events_primary.Items.Count != 0)
             {
-                Console.WriteLine("No events in private calendar");
-                primaryNotNull = false;
-            }
-            if (events_shared == null || events_shared.Items.Count == 0)
-            {
-                Console.WriteLine("No events in shared calendar.");
-                sharedNotNull = false;
+                combined.AddRange(events_primary.Items);
             }
 
-            if (primaryNotNull && sharedNotNull)
+            if (events_shared != null && events_shared.Items.Count != 0)
             {
-                // TODO: Implement response join
+                combined.AddRange(events_shared.Items);
             }
-            else if (sharedNotNull)
+
+            if (combined == null)
             {
-                foreach (var eventItem in events_shared.Items)
-                {
-                    string when = eventItem.Start.DateTimeDateTimeOffset.ToString();
-                    if (string.IsNullOrEmpty(when))
-                    {
-                        when = eventItem.Start.Date;    
-                    }
-                    Console.WriteLine("{0} ({1})", eventItem.Summary, when);
-                }                
+                return null;
             }
-            else if (primaryNotNull)
+            
+            combined = combined.OrderBy(e => e.Start.DateTimeDateTimeOffset).ToList();
+
+            var calendarModel = new CalendarDataFront
             {
-                foreach (var eventItem in events_primary.Items)
-                {
-                    string when = eventItem.Start.DateTimeDateTimeOffset.ToString();
-                    if (string.IsNullOrEmpty(when))
-                    {
-                        when = eventItem.Start.Date;    
-                    }
-                    Console.WriteLine("{0} ({1})", eventItem.Summary, when);
-                }
-            }
-            return null;
+                Events = combined
+            };
+
+            return calendarModel;         
+
         }
         catch (FileNotFoundException e)
         {

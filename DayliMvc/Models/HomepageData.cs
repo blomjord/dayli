@@ -1,4 +1,5 @@
 using DayliMvc.Models.WeatherData;
+using DayliMvc.Models.CalendarData;
 
 namespace DayliMvc.Models;
 

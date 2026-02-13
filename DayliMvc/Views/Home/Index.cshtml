@@ -40,7 +40,20 @@
 
     <div class="col-6 rounded-borders-blue">
         <h2 class="col-12 home-hdr">Dagens schema</h3>
-        <h1>Test:</h1>
+            <table>
+                <tbody>
+                @foreach (var element in Model.Calendar.Events) {
+                    <tr class="calendar">
+                        <td>
+                            <p>@element.Start.DateTimeDateTimeOffset)</p>
+                        </td>
+                        <td>
+                            <p>@element.Summary</p>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            <table>
     </div>
 
 </div>

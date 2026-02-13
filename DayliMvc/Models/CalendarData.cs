@@ -1,19 +1,17 @@
 #nullable enable
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.Net.Http.Headers;
 
-namespace DayliMvc.Models;
+using Google.Apis.Calendar.v3.Data;
 
+namespace DayliMvc.Models.CalendarData;
 public class CalendarDataFront
 {
-    public int? userId { get; set; }
-    public int? id { get; set; }
-    public string? title { get; set; }
-    public bool? completed { get; set; }
+    public List<Event> Events { get; set; } =  new();
 }
 
 public class CalendarDataPage
 {
     public int? userId { get; set; }
 }
+
+
 
