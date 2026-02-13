@@ -53,6 +53,10 @@ tr {
   height: 50px;
 }
 
+tr .calendar {
+  
+}
+
 td p {
   margin: auto;
   overflow: hidden;
