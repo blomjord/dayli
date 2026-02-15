@@ -7,7 +7,7 @@
 
 @model HomepageData
 
-<div class="row">
+<div class="row g-0">
                 
     <div class="col-6 rounded-borders-blue">
         <h2 class="col-12 home-hdr" style="margin: auto;">Dagens väder</h3>
@@ -39,13 +39,13 @@
         </div>
 
     <div class="col-6 rounded-borders-blue">
-        <h2 class="col-12 home-hdr">Dagens schema</h3>
+        <h2 class="col-12 home-hdr" style="margin: auto;">Dagens schema</h3>
             <table>
                 <tbody>
                 @foreach (var element in Model.Calendar.Events) {
                     <tr class="calendar">
                         <td>
-                            <p>@element.Start.DateTimeDateTimeOffset)</p>
+                            <p>@element.Start.DateTimeDateTimeOffset?.ToString("HH:mm")-@element.End.DateTimeDateTimeOffset?.ToString("HH:mm")</p>
                         </td>
                         <td>
                             <p>@element.Summary</p>
