@@ -37,7 +37,7 @@ body {
 }
 
 .home-hdr {
-  padding-top: 4px;
+  padding: 2px;
   font-size: 2em;
   text-align: center;
 }
@@ -45,16 +45,12 @@ body {
 table {
   table-layout: fixed;
   width: 100%;
-  margin: 4px;
+  margin: auto;
 }
 
 tr {
   text-align: center;
   height: 50px;
-}
-
-tr .calendar {
-  
 }
 
 td p {
@@ -64,9 +60,19 @@ td p {
   text-overflow: ellipsis;
 }
 
+tbody tr:nth-child(even) {
+  background-color: rgb(208, 214, 219);
+}
+
+tbody tr:nth-child(odd) {
+  background-color: rgb(95, 157, 228);
+
+}
+
 .rounded-borders-blue {
   width: 49%;
   border: 2px solid;
   border-radius: 50px;
   border-color: #258cfb;
+  overflow: hidden;
 }
