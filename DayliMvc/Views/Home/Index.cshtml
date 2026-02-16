@@ -19,13 +19,13 @@
                             <p style="direction: rtl;">
                                 <span style="white-space: nowrap; direction: ltr; display: inline-block;">
                                     <time>
-                                        @element.time.ToString("dd MMM HH:mm", new CultureInfo("sv-SE"))
+                                        <strong>@element.time.ToString("dd MMM HH:mm", new CultureInfo("sv-SE"))</strong>
                                     </time>
                                 </span>
                             </p>
                         </td>
                         <td>
-                            @element.data.air_temperature&deg C
+                            <strong>@element.data.air_temperature&deg C</strong>
                         </td>       
                         <td>
                             <p class="weather-icon">
@@ -45,10 +45,10 @@
                 @foreach (var element in Model.Calendar.Events) {
                     <tr class="calendar">
                         <td>
-                            <p>@element.Start.DateTimeDateTimeOffset?.ToString("HH:mm")-@element.End.DateTimeDateTimeOffset?.ToString("HH:mm")</p>
+                            <strong>@element.Start.DateTimeDateTimeOffset?.ToString("HH:mm")-@element.End.DateTimeDateTimeOffset?.ToString("HH:mm")</strong>
                         </td>
                         <td>
-                            <p>@element.Summary</p>
+                            <strong>@element.Summary</strong>
                         </td>
                     </tr>
                 }
