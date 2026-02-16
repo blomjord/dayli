@@ -10,7 +10,7 @@
 <div class="row g-0">
                 
     <div class="col-6 rounded-borders-blue">
-        <h2 class="col-12 home-hdr" style="margin: auto;">Dagens väder</h3>
+        <h2 class="col-12 home-hdr" style="margin: auto;">Dagens väder</h2>
             <table>
                 <tbody>
                 @foreach (var element in Model.Weather.timeSeries.Take(12)) {
@@ -39,7 +39,7 @@
         </div>
 
     <div class="col-6 rounded-borders-blue">
-        <h2 class="col-12 home-hdr" style="margin: auto;">Dagens schema</h3>
+        <h2 class="col-12 home-hdr" style="margin: auto;">Dagens schema</h2>
             <table>
                 <tbody>
                 @foreach (var element in Model.Calendar.Events) {
@@ -53,7 +53,7 @@
                     </tr>
                 }
                 </tbody>
-            <table>
+            </table>
     </div>
 
 </div>
