@@ -43,12 +43,23 @@
             <table>
                 <tbody>
                 @foreach (var element in Model.Calendar.Events) {
+                    
+                    // Google does not allow changing own display name, manual workaround
+                    var calendarName = @element.Organizer.DisplayName;
+                    if (calendarName != "Amanda + André")
+                    {
+                        calendarName = "André";
+                    }
+
                     <tr class="calendar">
                         <td>
                             <strong>@element.Start.DateTimeDateTimeOffset?.ToString("HH:mm")-@element.End.DateTimeDateTimeOffset?.ToString("HH:mm")</strong>
                         </td>
                         <td>
                             <strong>@element.Summary</strong>
+                        </td>
+                        <td>
+                            <strong>@calendarName</strong>
                         </td>
                     </tr>
                 }
