@@ -50,12 +50,12 @@ public class CalendarService
             });
 
             // Only show events same day 00:00-24:00
-            DateTimeOffset now = DateTime.Now;
+            DateTimeOffset Today = DateTime.Today;
             DateTimeOffset MaxTimeLimit = DateTime.Today.AddDays(1);
 
             // Private calendar
             EventsResource.ListRequest request_primary = service.Events.List("primary");
-            request_primary.TimeMinDateTimeOffset = now;
+            request_primary.TimeMinDateTimeOffset = Today;
             request_primary.TimeMaxDateTimeOffset = MaxTimeLimit;
             request_primary.ShowDeleted = false;
             request_primary.SingleEvents = true;
@@ -65,7 +65,7 @@ public class CalendarService
 
             // Secondary calendar (optional)
             EventsResource.ListRequest request_shared = service.Events.List(shared);
-            request_shared.TimeMinDateTimeOffset = now;
+            request_shared.TimeMinDateTimeOffset = Today;
             request_shared.TimeMaxDateTimeOffset = MaxTimeLimit;
             request_shared.ShowDeleted = false;
             request_shared.SingleEvents = true;
