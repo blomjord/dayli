@@ -4,8 +4,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient<WeatherService>(c => c.BaseAddress = new Uri("https://jsonplaceholder.typicode.com"));
-builder.Services.AddHttpClient<CalendarService>(c => c.BaseAddress = new Uri("https://jsonplaceholder.typicode.com"));
 
 var app = builder.Build();
 
