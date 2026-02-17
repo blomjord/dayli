@@ -53,7 +53,7 @@ public class CalendarService
             DateTimeOffset Today = DateTime.Today;
             DateTimeOffset MaxTimeLimit = DateTime.Today.AddDays(1);
 
-            // Private calendar
+            // Needs to be two separate requests, combine afterwards
             EventsResource.ListRequest request_primary = service.Events.List("primary");
             request_primary.TimeMinDateTimeOffset = Today;
             request_primary.TimeMaxDateTimeOffset = MaxTimeLimit;
@@ -63,7 +63,6 @@ public class CalendarService
             request_primary.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
             Events events_primary = request_primary.Execute();
 
-            // Secondary calendar (optional)
             EventsResource.ListRequest request_shared = service.Events.List(shared);
             request_shared.TimeMinDateTimeOffset = Today;
             request_shared.TimeMaxDateTimeOffset = MaxTimeLimit;
