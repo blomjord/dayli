@@ -21,7 +21,7 @@ public class CalendarService
     static string[] Scopes = [Google.Apis.Calendar.v3.CalendarService.Scope.CalendarReadonly];
     static string applicationName = "Google Calendar API for dayli project";
 
-    public static async Task<CalendarDataFront?> GetCalendarDailyEvents()
+    public static async Task<List<Event>> GetCalendarDailyEvents()
     {
         var shared = File.ReadAllText(@"wwwroot\calendarShared.txt");
 
@@ -33,12 +33,12 @@ public class CalendarService
                     new FileStream(RootPath + "credentials.json", FileMode.Open, FileAccess.Read))
             {
                 string credPath = RootPath + "token.json";
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.FromStream(stream).Secrets,
                     Scopes,
                     "user",
                     CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
+                    new FileDataStore(credPath, true));
                 Console.WriteLine("Credetial file saved at: " + credPath);
             }
 
@@ -83,26 +83,19 @@ public class CalendarService
             {
                 combined.AddRange(events_shared.Items);
             }
-
-            if (combined == null)
-            {
-                return null;
-            }
             
             combined = combined.OrderBy(e => e.Start.DateTimeDateTimeOffset).ToList();
-
-            var calendarModel = new CalendarDataFront
-            {
-                Events = combined
-            };
-
-            return calendarModel;         
-
+            return combined;     
         }
         catch (FileNotFoundException e)
         {
             Console.WriteLine(e.Message);
-            return null;
+            return new List<Event>();
         }
+    }
+
+    public static async Task<CalendarDataFront?> GetCalendarMonthlyEvents()
+    {
+        return null;
     }
 }
