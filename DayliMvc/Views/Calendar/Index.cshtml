@@ -7,31 +7,38 @@
 
 @model DayliMvc.Models.CalendarData.CalendarDataFront
 
-<div class="col-6 rounded-borders-blue">
-    <h2 class="col-12 home-hdr" style="margin: auto;">Kalender</h2>
-        <table>
-            <tbody>
-            @foreach (var element in Model.Events) {
-                
-                // Google does not allow changing own display name, manual workaround
-                var calendarName = @element.Organizer.DisplayName;
-                if (calendarName != "Amanda + André")
-                {
-                    calendarName = "André";
-                }
+<div class="row g-0">
+    <div class="col-6 rounded-borders-blue">
+        <h2 class="col-12 home-hdr" style="margin: auto;">Kommande händelser</h2>
+            <table>
+                <tbody>
+                @foreach (var element in Model.Events) {
+                    
+                    // Google does not allow changing own display name, manual workaround
+                    var calendarName = @element.Organizer.DisplayName;
+                    if (calendarName != "Amanda + André")
+                    {
+                        calendarName = "André";
+                    }
 
-                <tr class="calendar">
-                    <td>
-                        <strong>@element.Start.DateTimeDateTimeOffset?.ToString("HH:mm")-@element.End.DateTimeDateTimeOffset?.ToString("HH:mm")</strong>
-                    </td>
-                    <td>
-                        <strong>@element.Summary</strong>
-                    </td>
-                    <td>
-                        <strong>@calendarName</strong>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                    <tr class="calendar">
+                        <td>
+                            <strong>
+                                @(
+                                    element.Start.DateTimeDateTimeOffset?.ToString("dd MMM yyy", new CultureInfo("sv-SE"))
+                                    ?? DateTime.Parse(element.Start.Date).ToString("dd MMM yyyy", new CultureInfo("sv-SE"))
+                                )
+                            </strong>
+                        </td>
+                        <td>
+                            <strong>@element.Summary</strong>
+                        </td>
+                        <td>
+                            <strong>@calendarName</strong>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>

@@ -21,7 +21,7 @@ public class CalendarService
     static string[] Scopes = [Google.Apis.Calendar.v3.CalendarService.Scope.CalendarReadonly];
     static string applicationName = "Google Calendar API for dayli project";
 
-    public static async Task<List<Event>> GetCalendarDailyEvents()
+    public static async Task<List<Event>> GetCalendarDailyEvents(int numberOfDays)
     {
         var shared = File.ReadAllText(@"wwwroot\calendarShared.txt");
 
@@ -49,9 +49,8 @@ public class CalendarService
                 ApplicationName = applicationName
             });
 
-            // Only show events same day 00:00-24:00
             DateTimeOffset Today = DateTime.Today;
-            DateTimeOffset MaxTimeLimit = DateTime.Today.AddDays(1);
+            DateTimeOffset MaxTimeLimit = DateTime.Today.AddDays(numberOfDays);
 
             // Needs to be two separate requests, combine afterwards
             EventsResource.ListRequest request_primary = service.Events.List("primary");
@@ -83,8 +82,14 @@ public class CalendarService
             {
                 combined.AddRange(events_shared.Items);
             }
-            
-            combined = combined.OrderBy(e => e.Start.DateTimeDateTimeOffset).ToList();
+
+            combined = combined
+                .OrderBy(e =>
+                    e.Start.DateTimeDateTimeOffset ??
+                    (e.Start != null 
+                        ? DateTimeOffset.Parse(e.Start.Date)
+                        : DateTimeOffset.MaxValue)
+                ).ToList();
             return combined;     
         }
         catch (FileNotFoundException e)
@@ -92,10 +97,5 @@ public class CalendarService
             Console.WriteLine(e.Message);
             return new List<Event>();
         }
-    }
-
-    public static async Task<CalendarDataFront?> GetCalendarMonthlyEvents()
-    {
-        return null;
     }
 }
