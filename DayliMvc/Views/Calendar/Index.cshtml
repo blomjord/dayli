@@ -1,3 +1,6 @@
+@using Microsoft.VisualBasic
+@using System.Globalization
+@using System.Runtime.InteropServices
 @{
     ViewData["Title"] = "Calendar";
 }
@@ -5,4 +8,33 @@
 <div class="text-center">
     <h1 class="display-4">Calendar</h1>
     <p>See your scheduled events in your Google Calendar account.</p>
+</div>
+
+<div class="col-6 rounded-borders-blue">
+    <h2 class="col-12 home-hdr" style="margin: auto;">Dagens väder</h2>
+        <table>
+            <tbody>
+            @foreach (var element in Model.Weather.timeSeries.Take(12)) {
+                <tr>
+                    <td>
+                        <p style="direction: rtl;">
+                            <span style="white-space: nowrap; direction: ltr; display: inline-block;">
+                                <time>
+                                    <strong>@element.time.ToString("dd MMM HH:mm", new CultureInfo("sv-SE"))</strong>
+                                </time>
+                            </span>
+                        </p>
+                    </td>
+                    <td>
+                        <strong>@element.data.air_temperature&deg C</strong>
+                    </td>       
+                    <td>
+                        <p class="weather-icon">
+                            <img src="~/Img/@(element.data.symbol_code).webp" alt="@(element.data.symbol_code).webp">
+                        </p>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
 </div>
