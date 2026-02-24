@@ -12,6 +12,15 @@
         <h2 class="col-12 home-hdr" style="margin: auto;">Kommande händelser</h2>
             <table>
                 <tbody>
+                    <tr>
+                        <td class="tbl-hdr">När?</td>
+                        <td class="tbl-hdr">Vad?</td>
+                        <td class="tbl-hdr">Vem?</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table>
+                <tbody>
                 @foreach (var element in Model.Events) {
                     
                     // Google does not allow changing own display name, manual workaround
