@@ -1,12 +1,24 @@
+using Google.Apis.Calendar.v3.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
+
+using DayliMvc.Services;
+using DayliMvc.Models.CalendarData;
+
+using System.Runtime.CompilerServices;
 
 namespace DayliMvc.Controllers;
 
 public class CalendarController : Controller
 {
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var TaskCalendar = await CalendarService.GetCalendarDailyEvents();
+        return View(
+            new CalendarDataFront
+            {
+                Events = TaskCalendar
+            }
+        );
     }
 }
