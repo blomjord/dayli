@@ -21,7 +21,7 @@ public class CalendarService
     static string[] Scopes = [Google.Apis.Calendar.v3.CalendarService.Scope.CalendarReadonly];
     static string applicationName = "Google Calendar API for dayli project";
 
-    public static async Task<List<Event>> GetCalendarDailyEvents(int numberOfDays)
+    public static async Task<List<Event>> GetCalendarEvents(int numberOfDays)
     {
         var shared = File.ReadAllText(@"wwwroot\calendarShared.txt");
 

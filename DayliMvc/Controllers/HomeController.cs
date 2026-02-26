@@ -12,7 +12,7 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         var TaskWeather = WeatherService.GetWeatherPointData();
-        var TaskCalendar = CalendarService.GetCalendarDailyEvents(1);
+        var TaskCalendar = CalendarService.GetCalendarEvents(1);
         await Task.WhenAll(TaskWeather, TaskCalendar);
 
         return View(
