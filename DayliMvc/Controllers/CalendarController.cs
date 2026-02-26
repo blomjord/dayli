@@ -13,7 +13,7 @@ public class CalendarController : Controller
 {
     public async Task<IActionResult> Index()
     {
-        var TaskCalendar = await CalendarService.GetCalendarEvents(90);
+        var TaskCalendar = await CalendarService.GetCalendarEvents(numberOfDays: 90);
         return View(
             new CalendarDataFront
             {
