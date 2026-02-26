@@ -14,6 +14,16 @@
         <h2 class="col-12 home-hdr" style="margin: auto;">Dagens väder</h2>
             <table>
                 <tbody>
+                    <tr>
+                        <td class="tbl-hdr">Datum</td>
+                        <td class="tbl-hdr">Temperatur</td>
+                        <td class="tbl-hdr">Väder</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table>
+            <table>
+                <tbody>
                 @foreach (var element in Model.Weather.timeSeries.Take(12)) {
                     <tr>
                         <td>
@@ -41,6 +51,15 @@
 
     <div class="col-6 rounded-borders-blue">
         <h2 class="col-12 home-hdr" style="margin: auto;">Dagens schema</h2>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="tbl-hdr">Datum</td>
+                        <td class="tbl-hdr">Händelse</td>
+                        <td class="tbl-hdr">Gäller för</td>
+                    </tr>
+                </tbody>
+            </table>
             <table>
                 <tbody>
                 @foreach (var element in Model.Calendar) {

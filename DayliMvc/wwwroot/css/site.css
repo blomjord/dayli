@@ -79,6 +79,9 @@ tbody tr:nth-child(odd) {
 
 .tbl-hdr {
   background-color: rgb(200, 223, 238);
-  border-top: 2px solid;
+}
+
+h2.col-12.home-hdr {
+  border-bottom: 2px solid;
   border-color: #258cfb;
 }
